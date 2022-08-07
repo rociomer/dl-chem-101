@@ -3,4 +3,10 @@ data/zinc.tab
 data/zinc/
 data/zinc/*
 
+# Output
+output/*
+
 # Other
+__pycache__/
+*pyc
+*.egg-info
