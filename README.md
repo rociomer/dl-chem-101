@@ -2,9 +2,9 @@
 
 A repository for various introductory tutorials on deep learning for chemistry.
 
-* [01_prop_pred_FFN](./01_prop_pred_FFN/)
-* [02_prop_pred_GNN](./02_prop_pred_GNN/)
-* [03_gen_SMILES_LSTM](./03_gen_SMILES_LSTM/)
+* [FFN Property Prediction](./01_prop_pred_FFN/)
+* [GNN Property Preddiction](./02_prop_pred_GNN/)
+* [LSTM SMILES Generaation](./03_gen_SMILES_LSTM/)
 
 ## Introduction
 
