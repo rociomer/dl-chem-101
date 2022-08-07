@@ -10,8 +10,6 @@ conda env create -f enviornment.yml
 pip install -r requirements.txt
 ```
 
-Proceed to pip install all relevant packages from enviornment.yml not installed with Conda after activating the enviornment.
-
 To install this module for development:
 
 ```
@@ -55,7 +53,7 @@ Again, this can also be made to run on gpu by adding `--gpu` at the end of the c
 
 ### Analyzing results
 
-Rather than maintain anaalysis scripts in the package itself. You can use a separate folder to contain any simple scripts for analyzing outputs. Here, we suggest using `analysis/` to hold such scripts. 
+Rather than maintain analysis scripts in the package itself. You can use a separate folder to contain any simple scripts for analyzing outputs. Here, we suggest using `analysis/` to hold such scripts. 
 
 As an example, we provide a script to print the top k predictions:
 

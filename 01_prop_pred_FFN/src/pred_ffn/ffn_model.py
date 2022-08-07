@@ -79,8 +79,8 @@ class ForwardFFN(pl.LightningModule):
             batch:
             batch_idx:
         """
-        pred_spec = self.forward(batch['fps'])
-        loss_dict = self.loss_fn(pred_spec, batch['targs'])
+        preds = self.forward(batch['fps'])
+        loss_dict = self.loss_fn(preds, batch['targs'])
         self.log("train_loss", loss_dict.get("loss"))
         return loss_dict
 
@@ -91,8 +91,8 @@ class ForwardFFN(pl.LightningModule):
             batch:
             batch_idx:
         """
-        pred_spec = self.forward(batch['fps'])
-        loss_dict = self.loss_fn(pred_spec, batch['targs'])
+        preds = self.forward(batch['fps'])
+        loss_dict = self.loss_fn(preds, batch['targs'])
         self.log("val_loss", loss_dict.get("loss"))
         return loss_dict
 
@@ -103,8 +103,8 @@ class ForwardFFN(pl.LightningModule):
             batch:
             batch_idx:
         """
-        pred_spec = self.forward(batch['fps'])
-        loss_dict = self.loss_fn(pred_spec, batch['targs'])
+        preds = self.forward(batch['fps'])
+        loss_dict = self.loss_fn(preds, batch['targs'])
         self.log("test_loss", loss_dict.get("loss"))
         return loss_dict
 
