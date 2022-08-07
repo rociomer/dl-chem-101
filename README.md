@@ -57,20 +57,27 @@ solutions and structures, we provide the following guiding prompts and
 references.
 
 ### 01_prop_pred_FFN
+In this repository, we will use a feed-forward neural network (FFN) to predict a molecular property relevant to drug discovery, Caco-2 cell permeability, from [molecular fingerprints](https://doi.org/10.1021/ci100050t) (originally demonstrated in [Wang *et al.* (2016)](https://doi.org/10.1021/acs.jcim.5b00642)). We use data available for download via the [Therapeutics Data Commons (TDC)](https://tdcommons.ai/single_pred_tasks/adme/#caco-2-cell-effective-permeability-wang-et-al) (original paper introducing the TDC from [Huang *et al.* (2021)](https://arxiv.org/abs/2102.09548)).
 
 
 ### 02_prop_pred_GNN
 
+[Gilmer *et al.* (2017)](https://proceedings.mlr.press/v70/gilmer17a.html)
+[Yang *et al.* (2019)](https://doi.org/10.1021/acs.jcim.9b00237)
+[Duvenaud *et al.* (2015)](https://proceedings.neurips.cc/paper/2015/hash/f9be311e65d81a9ad8150a60844bb94c-Abstract.html)
+MoleculeNet [Wu *et al.* (2017)](https://pubs.rsc.org/en/content/articlehtml/2018/sc/c7sc02664a#cit63) 
 
 ### 03_gen_smiles_LSTM
 In this repository, we will go through the process of training a SMILES long short-term memory (LSTM) network for molecular design tasks. At a high level, the way the model works is that it sees examples of valid molecular SMILES strings, and thus learns to generate new ones by sampling tokens from conditional probability distributions, similar to natural language processing tools which predict the best way to finish a sentence having seen the first few words.
 
-While the SMILES LSTM is widely-used in deep learning for molecular design tasks, one of the first papers to report a recurrent neural network (RNN) for molecular generation was [Segler et al. (2018)](https://doi.org/10.1021/acscentsci.7b00512). Another good early paper on a generative SMILES LSTM is [Bjerrum, E. J. (2018)](https://arxiv.org/abs/1703.07076).
+While the SMILES LSTM is widely-used in deep learning for molecular design tasks, one of the first papers to report a recurrent neural network (RNN) for molecular generation was [Segler *et al.* (2018)](https://doi.org/10.1021/acscentsci.7b00512). Another good early paper on a generative SMILES LSTM is [Bjerrum, E. J. (2018)](https://arxiv.org/abs/1703.07076).
 
 Code for this example was adapted from the SMILES LSTM implementation in the Molecular AI [REINVENT](https://github.com/MolecularAI/Reinvent) repository and structured as a stand-alone package.
+
+In this example, we train on a 50K subset of SMILES strings from the ZINC dataset [available from the TDC](https://tdcommons.ai/generation_tasks/molgen/). We go through the process of downloading and splitting the data, then provide two examples for training the model: one on a local GPU, and one on a supercomputing cluster using a job scheduler (LLsub).
 
 ### 04_gen_smiles_VAE
 
 
 ## References
-1. Segler et al., *ACS Cent. Sci.*, **2018**, 4, 1, *120–131*.
+1. Segler *et al.*, *ACS Cent. Sci.*, **2018**, 4, 1, *120–131*.
