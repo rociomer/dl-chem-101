@@ -10,3 +10,15 @@ smiles_file: data/Enamine10k.csv
 
 2022-08-07 13:06:58,617 INFO: Loaded model with from results/example_run/version_0/epoch=232-val_loss=0.98.ckpt
 2022-08-07 13:06:59,018 INFO: Program finished in: 0.7349703311920166 seconds
+2022-08-07 15:20:26,338 INFO: Args:
+batch_size: 256
+checkpoint_pth: results/example_run/version_0/epoch=232-val_loss=0.98.ckpt
+debug: false
+gpu: false
+num_workers: 16
+save_dir: results/example_run
+save_name: results/example_run/preds.tsv
+smiles_file: data/Enamine10k.csv
+
+2022-08-07 15:20:26,830 INFO: Loaded model with from results/example_run/version_0/epoch=232-val_loss=0.98.ckpt
+2022-08-07 15:20:27,207 INFO: Program finished in: 0.8704907894134521 seconds

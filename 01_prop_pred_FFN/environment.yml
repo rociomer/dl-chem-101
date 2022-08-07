@@ -11,6 +11,7 @@ dependencies:
 - rdkit=2021.03.*
 - cudatoolkit=11.1
 - pytorch-lightning=1.4.*
+- torchmetrics=0.6.*
 - conda-minify=0.1.*
 - pip=21.2.*
 - pytorch::torchvision
@@ -19,8 +20,3 @@ dependencies:
 - pytorch::pytorch=1.9.* #- dgl=0.7.*
 - nb_conda_kernels=2.3.*
 - seaborn=0.11.*
-pip: 
-- dgllife
-- pathos
-- setuptools=59
-- PyTDC

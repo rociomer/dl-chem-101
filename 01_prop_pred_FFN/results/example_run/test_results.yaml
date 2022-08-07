@@ -11,4 +11,4 @@ args:
   save_dir: results/example_run/
   seed: 42
 test_metrics:
-  test_loss: 1.2971481084823608
+  test_loss: 1.299291729927063

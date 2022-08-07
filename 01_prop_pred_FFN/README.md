@@ -7,7 +7,7 @@ The repository uses a feed forward network applied to molecule Morgan Fingerprin
 Install the conda enviornment:
 ```
 conda env create -f enviornment.yml
-pip install - 
+pip install -r requirements.txt
 ```
 
 Proceed to pip install all relevant packages from enviornment.yml not installed with Conda after activating the enviornment.
@@ -15,8 +15,7 @@ Proceed to pip install all relevant packages from enviornment.yml not installed 
 To install this module for development:
 
 ```
-python3 setup.py develop
-
+python setup.py develop
 ```
 
 Installing and structuring a package as a module makes it easy to avoid relative imports in code, which tend to complicate development.
