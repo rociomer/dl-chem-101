@@ -1,0 +1,6 @@
+# Data
+data/zinc.tab
+data/zinc/
+data/zinc/*
+
+# Other
