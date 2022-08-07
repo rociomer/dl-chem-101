@@ -4,8 +4,8 @@ Implementation of the SMILES LSTM, based on the REINVENT implementation.
 from typing import List, Tuple, Union
 import numpy as np
 import torch
-from malmo.models.smiles_vocabulary import Vocabulary, SMILESTokenizer
-from malmo.utils import suppress_warnings, get_device
+from smiles_lstm.model.smiles_vocabulary import Vocabulary, SMILESTokenizer
+from smiles_lstm.utils.misc import suppress_warnings, get_device
 
 # suppress minor warnings
 suppress_warnings()
@@ -38,12 +38,12 @@ class RNN(torch.nn.Module):
         """
         super(RNN, self).__init__()
 
-        self._layer_size = layer_size
+        self._layer_size           = layer_size
         self._embedding_layer_size = embedding_layer_size
-        self._num_layers = num_layers
-        self._cell_type = cell_type.lower()
-        self._dropout = dropout
-        self._layer_normalization = layer_normalization
+        self._num_layers           = num_layers
+        self._cell_type            = cell_type.lower()
+        self._dropout              = dropout
+        self._layer_normalization  = layer_normalization
 
         self._embedding = torch.nn.Embedding(voc_size,
                                              self._embedding_layer_size)
@@ -72,10 +72,11 @@ class RNN(torch.nn.Module):
 
         Params:
         ------
-            input_vector (torch.Tensor) : Input tensor (batch_size, seq_size).
+            input_vector (torch.Tensor)         : Input tensor (batch_size, seq_size).
             hidden_state (torch.Tensor or None) : Hidden state tensor.
         """
         batch_size, seq_size = input_vector.size()
+
         _device = get_device()
         if hidden_state is None:
             size = (self._num_layers, batch_size, self._layer_size)
@@ -84,7 +85,8 @@ class RNN(torch.nn.Module):
             else:
                 hidden_state = [torch.zeros(*size, device=_device),
                                 torch.zeros(*size, device=_device)]
-        embedded_data = self._embedding(input_vector)  # (batch,seq,embedding)
+
+        embedded_data                   = self._embedding(input_vector)  # (batch,seq,embedding)
         output_vector, hidden_state_out = self._rnn(embedded_data, hidden_state)
 
         if self._layer_normalization:
@@ -93,7 +95,6 @@ class RNN(torch.nn.Module):
         output_vector = output_vector.reshape(-1, self._layer_size)
 
         output_data = self._linear(output_vector).view(batch_size, seq_size, -1)
-        # TODO should there not be a nonlinear activation layer here
         return output_data, hidden_state_out
 
     def get_params(self) -> dict:
@@ -101,31 +102,28 @@ class RNN(torch.nn.Module):
         Returns the configuration parameters of the model.
         """
         return {
-            "dropout": self._dropout,
-            "layer_size": self._layer_size,
-            "num_layers": self._num_layers,
-            "cell_type": self._cell_type,
-            "embedding_layer_size": self._embedding_layer_size
+            "dropout"              : self._dropout,
+            "layer_size"           : self._layer_size,
+            "num_layers"           : self._num_layers,
+            "cell_type"            : self._cell_type,
+            "embedding_layer_size" : self._embedding_layer_size
         }
 
 
 class SmilesLSTM():
     """
-    Implements an RNN model using SMILES.
+    Implements an RNN model using SMILES as input.
     """
     def __init__(self, vocabulary: Vocabulary, tokenizer : SMILESTokenizer,
                  network_params : Union[dict, None]=None,
                  max_sequence_length : int=256) -> None:
         """
-        Implements an RNN.
-
         Params:
         ------
             vocabulary (Vocabulary)       : Vocabulary to use.
             tokenizer (SmilesTokenizer)   : Tokenizer to use.
-            network_params (dict or None) : Dictionary with all parameters
-                                            required to correctly initialize the
-                                            RNN class.
+            network_params (dict or None) : Dictionary with all parameters required
+                                            to correctly initialize the RNN class.
             max_sequence_length (int)     : The max size of SMILES sequence that
                                             can be generated.
         """
@@ -186,8 +184,8 @@ class SmilesLSTM():
         -------
             torch.Tensor : Negative log-likelihood of each sample.
         """
-        tokens = [self.tokenizer.tokenize(smile) for smile in smiles]
-        encoded = [self.vocabulary.encode(token) for token in tokens]
+        tokens    = [self.tokenizer.tokenize(smile) for smile in smiles]
+        encoded   = [self.vocabulary.encode(token) for token in tokens]
         sequences = [
             torch.tensor(encode, dtype=torch.long, device=self._device) for encode in encoded
         ]
@@ -197,7 +195,7 @@ class SmilesLSTM():
             Function to take a list of encoded sequences and turn them into a
             batch.
             """
-            max_length = max([seq.size(0) for seq in encoded_seqs])
+            max_length   = max([seq.size(0) for seq in encoded_seqs])
             collated_arr = torch.zeros(len(encoded_seqs),
                                        max_length,
                                        dtype=torch.long,
@@ -228,10 +226,9 @@ class SmilesLSTM():
         log_probs = logits.log_softmax(dim=2)
         return self._nll_loss(log_probs.transpose(1, 2), sequences[:, 1:]).sum(dim=1)
 
-    def sample_smiles(self, num : int=128, batch_size : int=128) -> \
-                      Tuple[List, np.array]:
+    def sample_smiles(self, num : int=128, batch_size : int=128) -> Tuple[List, np.array]:
         """
-        Samples n SMILES from the model.
+        Samples N='num' SMILES from the model.
 
         Params:
         ------
@@ -317,10 +314,10 @@ class SmilesLSTM():
         for _ in range(self.max_sequence_length - 1):
             logits, hidden_state = self.network(input_vector.unsqueeze(1),
                                                 hidden_state)
-            logits = logits.squeeze(1)
+            logits        = logits.squeeze(1)
             probabilities = logits.softmax(dim=1)
-            log_probs = logits.log_softmax(dim=1)
-            input_vector = torch.multinomial(probabilities, 1).view(-1)
+            log_probs     = logits.log_softmax(dim=1)
+            input_vector  = torch.multinomial(probabilities, 1).view(-1)
             sequences.append(input_vector.view(-1, 1))
             nlls += self._nll_loss(log_probs, input_vector)
             if input_vector.sum() == 0:

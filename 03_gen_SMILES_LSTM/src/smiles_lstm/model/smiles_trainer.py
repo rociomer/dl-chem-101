@@ -1,19 +1,17 @@
 """
-SMILES LSTM trainer class.
+SMILES LSTM trainer class based on the REINVENT implementation.
 """
-import glob
 import csv
-from multiprocessing.sharedctypes import Value
 import os
-from os import path, remove
+from os import path
 from typing import Union, Tuple
 import rdkit
 import torch
-from malmo.models.smiles_dataset import Dataset
-from malmo.models.smiles_vocabulary import SMILESTokenizer
-from malmo.models.smiles_lstm import SmilesLSTM
-from malmo.utils import draw_smiles, progress_bar, save_smiles
-import malmo.load as load
+from smiles_lstm.model.smiles_dataset import Dataset
+from smiles_lstm.model.smiles_vocabulary import SMILESTokenizer
+from smiles_lstm.model.smiles_lstm import SmilesLSTM
+from smiles_lstm.utils.misc import draw_smiles, progress_bar, save_smiles
+import smiles_lstm.utils.load as load
 
 rdkit.rdBase.DisableLog("rdApp.error")
 
@@ -26,16 +24,16 @@ class SmilesTrainer():
                  epochs : int=10, learning_rate : float=0.0001,
                  batch_size : int=250, shuffle : bool=True,
                  augment : int=0, output_model_path : str="./output/", start_epoch : int=0,
-                 learning_rate_scheduler : str="StepLR", gamma : float=0.8, 
+                 learning_rate_scheduler : str="StepLR", gamma : float=0.8,
                  eval_num_samples : int=64, eval_batch_size : int=64) -> None:
         """
         Args:
         ----
             model (SmilesLSTM)                : The SMILES LSTM generative model.
-            input_smiles (dict or str)        : If str, contains the path to the directory
+            input_smiles (dict or str)        : If `str`, contains the path to the directory
                                                 containing the training, testing, and
                                                 validation data ("train.smi", "test.smi",
-                                                and "valid.smi"). If dict, contains the
+                                                and "valid.smi"). If `dict`, contains the
                                                 training, testing, and validation data,
                                                 with "train", "test", and "valid" as keys.
             epochs (int, optional)            : Number of epochs to train for.
@@ -50,9 +48,14 @@ class SmilesTrainer():
                                                 SMILES to use for data augmentation.
             output_model_path (str, optional) : Directory in which to save the
                                                 results. Defaults to "./output/".
-            start_epoch (int)                 : TODO
-            learning_rate_scheduler (str)     : TODO
-            gamma (float)                     : TODO
+            start_epoch (int)                 : Epoch at which to start training.
+            learning_rate_scheduler (str)     : Type of learning rate scheduler
+                                                ("StepLR" or "CosineAnnealingLR").
+            gamma (float)                     : Gamma value for the StepLR learning
+                                                rate scheduler.
+            eval_num_samples (int)            : Number of samples to use for evaluating
+                                                the generative model.
+            eval_batch_size (int)             : Batch size to use during evaluation.
         """
         # define the model
         self._model = model
@@ -88,7 +91,7 @@ class SmilesTrainer():
             self._scheduler = torch.optim.lr_scheduler.StepLR(
                 optimizer=self._optimizer,
                 step_size=1,
-                gamma=gamma,  # source: https://github.com/MolecularAI/Reinvent/blob/master/running_modes/configurations/transfer_learning/adaptive_learning_rate_configuration.py
+                gamma=gamma,
             )
         else:
             raise ValueError("Please enter a valid value for ´learning_rate_scheduler´.")
@@ -96,16 +99,22 @@ class SmilesTrainer():
         # create a directory for the model if one does not exist already
         if not os.path.exists(self._output_model_path):
             os.makedirs(self._output_model_path)
-        
+      
         # define paths for the output files
         params_filename                = f"{self._output_model_path}SmilesTrainer_params.csv"
         self._training_output_filename = f"{self._output_model_path}SmilesTrainer_training.csv"
 
         # write the basic hyperparameters to a CSV file
-        with open(params_filename, "w") as params_file:
+        with open(params_filename, "w", encoding="utf-8") as params_file:
             params_writer = csv.writer(params_file)
-            param_names  = ["model type", "batch size", "learning rate", "epochs", "start_epoch", "use shuffle", "use augmentation", "eval num samples", "eval batch size", "learning rate scheduler"]
-            param_values = ["SmilesTrainer", self._batch_size, self._learning_rate, self._epochs, self._start_epoch, self._shuffle, self._use_augmentation, self._eval_num_samples, self._eval_batch_size, learning_rate_scheduler]
+            param_names  = ["model type", "batch size", "learning rate",
+                            "epochs", "start_epoch", "use shuffle",
+                            "use augmentation", "eval num samples",
+                            "eval batch size", "learning rate scheduler"]
+            param_values = ["SmilesTrainer", self._batch_size, self._learning_rate,
+                            self._epochs, self._start_epoch, self._shuffle,
+                            self._use_augmentation, self._eval_num_samples,
+                            self._eval_batch_size, learning_rate_scheduler]
             params_writer.writerow(param_names)  # the header is the parameter names
             params_writer.writerow(param_values)
 
@@ -116,11 +125,12 @@ class SmilesTrainer():
         self._best_epoch      = None
 
         # create the output file
-        with open(self._training_output_filename, "w") as training_file:
+        with open(self._training_output_filename, "w", encoding="utf-8") as training_file:
             training_writer = csv.writer(training_file)
-            header = ["epoch", "learning rate", "training loss", "validation loss", "fraction valid"]
+            header = ["epoch", "learning rate", "training loss",
+                      "validation loss", "fraction valid"]
             training_writer.writerow(header)
-        
+
     def run(self):
         """
         Train the model for the specified number of epochs.
@@ -132,18 +142,24 @@ class SmilesTrainer():
             self._valid_epoch(self._valid_dataloader)
 
             # sample smiles and draw these
-            sampled_smiles, nlls = self._model.sample_smiles(num=self._eval_num_samples, 
+            sampled_smiles, nlls = self._model.sample_smiles(num=self._eval_num_samples,
                                                              batch_size=self._eval_batch_size)
-            fraction_valid       = draw_smiles(path=f"{self._output_model_path}sampled_epoch{epoch}.png",
-                                               smiles_list=sampled_smiles)
+            fraction_valid       = draw_smiles(
+                path=f"{self._output_model_path}sampled_epoch{epoch}.png",
+                smiles_list=sampled_smiles
+            )
             save_smiles(smiles=sampled_smiles,
-                        output_filename=f"{self._output_model_path}sampled_step{epoch}_noRL.smi")
+                        output_filename=f"{self._output_model_path}sampled_step{epoch}.smi")
 
             # write progress to the output CSV
             learning_rate = self._optimizer.param_groups[0]["lr"]
-            with open(self._training_output_filename, "a") as training_file:
+            with open(self._training_output_filename, "a", encoding="utf-8") as training_file:
                 training_writer = csv.writer(training_file)
-                progress = [epoch, learning_rate, self._train_loss.item(), self._valid_loss.item(), fraction_valid]
+                progress        = [epoch,
+                                   learning_rate,
+                                   self._train_loss.item(),
+                                   self._valid_loss.item(),
+                                   fraction_valid]
                 training_writer.writerow(progress)
 
             self._save_checkpoint(epoch)
@@ -163,8 +179,7 @@ class SmilesTrainer():
             self._best_valid_loss = self._valid_loss
             self._best_epoch = epoch
 
-        # always save the last model
-        self._save_last_model(epoch)
+        self._save_current_model(epoch)
 
     def _train_epoch(self, train_dataloader : torch.utils.data.DataLoader):
         """
@@ -180,8 +195,8 @@ class SmilesTrainer():
         dataloader_progress_bar = progress_bar(iterable=train_dataloader,
                                                total=len(train_dataloader))
         for batch_idx, batch in enumerate(dataloader_progress_bar):
-            input_vectors = batch.long()
-            loss = self._calculate_loss(input_vectors)
+            input_vectors          = batch.long()
+            loss                   = self._calculate_loss(input_vectors)
             loss_tensor[batch_idx] = loss
 
             self._model.network.zero_grad()  # clear gradient
@@ -210,8 +225,8 @@ class SmilesTrainer():
                                                total=len(valid_dataloader))
         with torch.no_grad():
             for batch_idx, batch in enumerate(dataloader_progress_bar):
-                input_vectors = batch.long()
-                loss = self._calculate_loss(input_vectors)
+                input_vectors          = batch.long()
+                loss                   = self._calculate_loss(input_vectors)
                 loss_tensor[batch_idx] = loss
 
         # update the validation loss
@@ -271,13 +286,10 @@ class SmilesTrainer():
             permutations = [rdkit.Chem.MolToSmiles(molecule,
                                                    canonical=False,
                                                    doRandom=True,
-                                                   isomericSmiles=False) for _ in range(n_permutations)]
+                                                   isomericSmiles=False)
+                            for _ in range(n_permutations)]
         except RuntimeError:
             permutations = [smiles]
-
-        for smi in permutations:
-            if "%28" in smi:
-                permutations.remove(smi)
 
         return permutations
 
@@ -297,34 +309,7 @@ class SmilesTrainer():
         log_p = self._model.likelihood(input_vectors)
         return log_p.mean()
 
-    def _save_best_model(self, epoch : int) -> None:  # TODO delete this function
-        """
-        Saves the current model, as it is the best model seen thus far.
-
-        Args:
-        ----
-            epoch (int) : Current training epoch.
-        """
-        # then save the new model
-        self._model.save_state(path=self._best_model_path(epoch))
-
-    def _best_model_path(self, epoch : Union[int, str]="*") -> str:
-        """
-        Returns a filename to use for saving the best model.
-
-        Args:
-        ----
-            epoch (int or str) : Current training epoch. Use "*" for regex.
-                                 Defaults to "*".
-
-        Returns:
-        -------
-            str : Filename.
-        """
-        path = f"{self._output_model_path}model.{epoch}.best.pth"
-        return path
-
-    def _save_last_model(self, epoch : int) -> None:
+    def _save_current_model(self, epoch : int) -> None:
         """
         Saves the current model as the 'last' model seen thus far.
 
@@ -332,24 +317,8 @@ class SmilesTrainer():
         ----
             epoch (int) : Current training epoch.
         """
-        # then save the new model
-        self._model.save_state(path=self._last_model_path(epoch))
-
-    def _last_model_path(self, epoch : Union[int, str]="*") -> str:
-        """
-        Returns a filename to use for saving the 'last' model.
-
-        Args:
-        ----
-            epoch (int or str) : Current training epoch. Use "*" for regex.
-                                 Defaults to "*".
-
-        Returns:
-        -------
-            str : Filename.
-        """
-        path = f"{self._output_model_path}model.{epoch}.last.pth"
-        return path
+        model_path = f"{self._output_model_path}model.{epoch}.pth"
+        self._model.save_state(path=model_path)
 
     def _load_smiles(self, input_smiles : Union[dict, str]) -> \
                      Tuple[list, list, list]:

@@ -8,10 +8,7 @@ In this directory you will find code for:
 [TODO write about directory structure here and how things are organized]
 
 # Instructions
-## Installing the SMILES LSTM as a package
-[TODO]
-
-## Setting up the environment
+## 00 - Setting up the environment
 On mol-gpu-01, you will need to install Miniconda locally to use conda. To do this:
 ````
 wget https://repo.anaconda.com/miniconda/Miniconda3-py39_4.12.0-Linux-x86_64.sh
@@ -20,7 +17,7 @@ bash Miniconda3-py39_4.12.0-Linux-x86_64.sh
 
 To create the environment from scratch using conda, run:
 ```
-conda create -n smiles-lstm-env pytorch torchvision torchaudio cudatoolkit=10.2 -c pytorch
+conda create -n smiles-lstm-env pytorch torchvision torchaudio cudatoolkit=11.1 -c pytorch
 conda activate smiles-lstm-env
 pip install rdkit
 pip install PyTDC
@@ -29,11 +26,18 @@ pip install PyTDC
 To instead create the environment from the provided YAML file, run:
 [TODO]
 
-## Downloading the data
-For this code, we will be downloading train-test-valid split data from the Therapeutics Data Commons (TDC). We will use ZINC. To  do this, run:
+We will then install the SMILES LSTM as a package using the provided `setup.py`. With the environment activated, run the following command from the `03_gen_SMILES_LSTM/` directory:
 ```
-python ./data/download-data.py
+pip install -e .
 ```
+
+## 01 - Downloading the data
+For this code, we will be downloading train/test/valid split data from the Therapeutics Data Commons (TDC). We will use ZINC. To do this, run:
+```
+python ./experiments/01_download_data.py
+```
+
+The script will divide the available ZINC data into a 50K/5K/5K set of train/test/valid splits.
 
 ## Running the different generative experiments 
 [TODO]

@@ -1,9 +1,9 @@
 """
-Vocabulary helper class.
+Vocabulary helper class based on the REINVENT implementation.
 """
 import re
-import rdkit
 from typing import Union
+import rdkit
 import numpy as np
 
 
@@ -11,7 +11,7 @@ class Vocabulary:
     """
     Stores the tokens and their conversion to vocabulary indexes.
     """
-    def __init__(self, tokens : Union[dict, None]=None, starting_id : int=0):
+    def __init__(self, tokens : Union[dict, None]=None, starting_id : int=0) -> None:
         self._tokens = {}
         self._current_id = starting_id
 
@@ -20,12 +20,12 @@ class Vocabulary:
                 self._add(token, idx)
                 self._current_id = max(self._current_id, idx + 1)
 
-    def __getitem__(self, token_or_id):
+    def __getitem__(self, token_or_id : str) -> int:
         return self._tokens[token_or_id]
 
     def add(self, token : str) -> int:
         """
-        Adds a token.
+        Adds a token to the vocabulary.
         """
         if not isinstance(token, str):
             raise TypeError("Token is not a string")
@@ -81,7 +81,9 @@ class Vocabulary:
             raise ValueError("IDX already present in vocabulary")
 
     def tokens(self) -> list:
-        """Returns the tokens from the vocabulary"""
+        """
+        Returns the tokens from the vocabulary.
+        """
         return [t for t in self._tokens if isinstance(t, str)]
 
 
@@ -132,7 +134,8 @@ class SMILESTokenizer:
         return smi
 
 
-def create_vocabulary(smiles_list : list, tokenizer : SMILESTokenizer, canonical : bool=True) -> Vocabulary:
+def create_vocabulary(smiles_list : list, tokenizer : SMILESTokenizer,
+                      canonical : bool=True) -> Vocabulary:
     """
     Creates a vocabulary for the SMILES syntax.
     """
@@ -140,11 +143,15 @@ def create_vocabulary(smiles_list : list, tokenizer : SMILESTokenizer, canonical
         noncanon_smiles_list = []
         for smiles in smiles_list:
             molecule = rdkit.Chem.MolFromSmiles(smiles)
-    
+
             try:
-                noncanon_smiles_list.append(rdkit.Chem.MolToSmiles(molecule, canonical=False, doRandom=True, isomericSmiles=False))
+                noncanon_smiles_list.append(
+                    rdkit.Chem.MolToSmiles(molecule,
+                                           canonical=False,
+                                           doRandom=True,
+                                           isomericSmiles=False)
+                )
             except:
-                #noncanon_smiles_list.append(smiles)
                 pass
 
         smiles_list += noncanon_smiles_list
