@@ -8,4 +8,4 @@
 hostname
 module purge; module load anaconda
 source activate smiles-lstm-env
-python experiments/03_train_model_locally.py --output "output/run-slurm/"
+python experiments/03_train_model_locally.py --output "output/run_supercloud/"

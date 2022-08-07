@@ -5,6 +5,7 @@ data/zinc/*
 
 # Output
 output/*
+analysis/*png
 
 # Other
 __pycache__/

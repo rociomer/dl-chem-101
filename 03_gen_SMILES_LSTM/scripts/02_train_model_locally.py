@@ -21,7 +21,7 @@ parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFo
 # define parameters for the model
 parser.add_argument("--output",
                     type=str,
-                    default="./output/run-local/",
+                    default="./output/run_local/",
                     help="Specifies the path to which to write output to.")
 args = parser.parse_args()
 

@@ -1,16 +1,17 @@
 # 03_gen_SMILES_LSTM
-An example of a SMILES LSTM as a stand-alone package.
+An example of a deep molecular generative model based on a SMILES LSTM, to be used as a stand-alone package.
 
-In this directory you will find code for:
-* SMILES LSTM (full version as stand-alone package)
-* A version without any comments, for an exercise in adding comments and docstrings
-
-[TODO write about directory structure here and how things are organized]
+The code in this package is structured as follows:
+* `src/` contains all the source code for the SMILES LSTM
+* `scripts/` contains example scripts for downloading data and running training jobs
+* `analysis/` contains an example script for visualizing the results of a training job
+* `data/` is a placeholder directory for holding training data
+* `output/` is a placeholder directory for the output from training jobs
 
 # Instructions
 ## 00 - Setting up the environment
-On mol-gpu-01, you will need to install Miniconda locally to use conda. To do this:
-````
+Note: to use conda on molgpu01, you will need to install Miniconda locally. To do this, run:
+```
 wget https://repo.anaconda.com/miniconda/Miniconda3-py39_4.12.0-Linux-x86_64.sh
 bash Miniconda3-py39_4.12.0-Linux-x86_64.sh 
 ```
@@ -23,27 +24,43 @@ pip install rdkit
 pip install PyTDC
 ```
 
-To instead create the environment from the provided YAML file, run:
-[TODO]
-
 We will then install the SMILES LSTM as a package using the provided `setup.py`. With the environment activated, run the following command from the `03_gen_SMILES_LSTM/` directory:
 ```
 pip install -e .
 ```
 
 ## 01 - Downloading the data
-For this code, we will be downloading train/test/valid split data from the Therapeutics Data Commons (TDC). We will use ZINC. To do this, run:
+To train the SMILES LSTM, we will be downloading train/test/valid split data from the Therapeutics Data Commons (TDC). We will use ZINC. To do this, run:
 ```
-python ./experiments/01_download_data.py
+python ./scripts/01_download_data.py
 ```
 
 The script will divide the available ZINC data into a 50K/5K/5K set of train/test/valid splits.
 
-## Running the different generative experiments 
-[TODO]
-* how to run on cpu locally
-* how to run on remote cluster (gpu preferrably)
+## 02 - Training the SMILES LSTM locally
+To train the model on a local GPU, run:
+```
+python ./scripts/02_train_model_locally.py
+```
+
+The model will train for 10 epochs on 50K SMILES sampled from the aforementioned ZINC dataset. This will take about 5 minutes on a single GPU. After 10 epochs, the model will not be fully trained but generating ~20% valid SMILES. You can see what the molecules being generated look like after each epoch N by opening the `sampled_epoch{N}.png` files generated within each job directory.
+
+## 03 - Training the SMILES LSTM on a high-performance computing cluster (SuperCloud)
+To train the model on the Supercloud, run:
+```
+python ./scripts/03_train_model_SuperCloud.py
+```
+
+This will submit the training job as a batch job using LLsub and run for about 5 minutes (timeout set to 10 minutes). It should produce similar results to the job run locally.
+
+You can modify this script to run on any other cluster (you will most likely need to modify the argument `--gres=gpu:volta:1` depending on the type of GPUs on the other cluster and how it is configured).
 
 ## Analysis and making figures
-[TODO]
+As an example, we can visualize how the training and validation losses change during training, as well as how the validity of molecules sampled from our SMILES LSTM increases as we train it for more epochs. To visualize these results, run:
+```
+python ./analysis/plot_results.py --jobdir ./output/run-local/
+``` 
 
+This will create two plots in the `./analysis/` directory.
+
+To visualize results for a different job, simply replace the argument after `--output` to the path to your new job and rerun.
