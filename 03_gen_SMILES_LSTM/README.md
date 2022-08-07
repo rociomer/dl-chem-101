@@ -1,12 +1,12 @@
-# 03_gen_SMILES_LSTM
+# Generative SMILES LSTM
 An example of a deep molecular generative model based on a SMILES LSTM, to be used as a stand-alone package.
 
 The code in this package is structured as follows:
 * `src/` contains all the source code for the SMILES LSTM
-* `scripts/` contains example scripts for downloading data and running training jobs
-* `analysis/` contains an example script for visualizing the results of a training job
+* `scripts/` contains example scripts for downloading data, running training jobs, and visualizing the results of a training job
 * `data/` is a placeholder directory for holding training data
 * `output/` is a placeholder directory for the output from training jobs
+* `analysis/` is a placeholder directory for figures and results of any data analyses
 
 # Instructions
 ## 00 - Setting up the environment
@@ -55,7 +55,7 @@ This will submit the training job as a batch job using LLsub and run for about 5
 
 You can modify this script to run on any other cluster (you will most likely need to modify the argument `--gres=gpu:volta:1` depending on the type of GPUs on the other cluster and how it is configured).
 
-## Analysis and making figures
+## 04 - Analysis and making figures
 As an example, we can visualize how the training and validation losses change during training, as well as how the validity of molecules sampled from our SMILES LSTM increases as we train it for more epochs. To visualize these results, run:
 ```
 python ./analysis/plot_results.py --jobdir ./output/run-local/
