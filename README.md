@@ -28,11 +28,11 @@ machine learning and chemistry to implement. Specifically:
 
 ### How should I use this? 
 
-We recommend two ways to use this repository
+We recommend two ways to use this repository:
 1. Reattempting tasks 
 
 Students should consider attempting these tasks from scratch before viewing our solutions 
-(see Problem Prompts)
+(see Problem Prompts).
 
 2. Adding documentation
 
@@ -57,6 +57,20 @@ solutions and structures, we provide the following guiding prompts and
 references.
 
 ### 01_prop_pred_FFN
+
+
 ### 02_prop_pred_GNN
+
+
 ### 03_gen_smiles_LSTM
+In this repository, we will go through the process of training a SMILES long short-term memory (LSTM) network for molecular design tasks. At a high level, the way the model works is that it sees examples of valid molecular SMILES strings, and thus learns to generate new ones by sampling tokens from conditional probability distributions, similar to natural language processing tools which predict the best way to finish a sentence having seen the first few words.
+
+While the SMILES LSTM is widely-used in deep learning for molecular design tasks, one of the first papers to report a recurrent neural network (RNN) for molecular generation was [Segler et al. (2018)](https://doi.org/10.1021/acscentsci.7b00512). Another good early paper on a generative SMILES LSTM is [Bjerrum, E. J. (2018)](https://arxiv.org/abs/1703.07076).
+
+Code for this example was adapted from the SMILES LSTM implementation in the Molecular AI [REINVENT](https://github.com/MolecularAI/Reinvent) repository and structured as a stand-alone package.
+
 ### 04_gen_smiles_VAE
+
+
+## References
+1. Segler et al., *ACS Cent. Sci.*, **2018**, 4, 1, *120–131*.
