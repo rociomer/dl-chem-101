@@ -1,0 +1,14 @@
+args:
+  batch_size: 64
+  dataset_name: caco
+  debug: false
+  dropout: 0.1
+  gpu: true
+  hidden_size: 256
+  layers: 3
+  max_epochs: 500
+  num_workers: 0
+  save_dir: results/example_run/
+  seed: 42
+test_metrics:
+  test_loss: 1.299291729927063
