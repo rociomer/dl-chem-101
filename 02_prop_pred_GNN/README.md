@@ -1,6 +1,6 @@
-GNN Property Prediction
+# GNN Property Prediction
 
-The repository uses a gnn applied to molecule graphs to predict molecular properties.
+The repository uses a GNN applied to molecule graphs to predict molecular properties.
 
 ## Install
 
