@@ -1,4 +1,4 @@
-# 01_prop_pred_ffn
+# FFN Property prediction
 
 The repository uses a feed forward network applied to molecule Morgan Fingerprints to predict molecular properties.
 
