@@ -9,6 +9,7 @@ import dgllife
 from dgllife.utils import CanonicalAtomFeaturizer, smiles_to_bigraph
 from pred_gnn import utils
 
+
 class GraphDataset(Dataset):
     """ GraphDataset."""
 
@@ -53,8 +54,7 @@ class GraphDataset(Dataset):
             edge_featurizer=self.bond_featurizer,
         )
 
-        outdict = {"smi": smi, "graph": graph,
-                   "targ": targ}
+        outdict = {"smi": smi, "graph": graph, "targ": targ}
         return outdict
 
     @classmethod
@@ -127,7 +127,10 @@ class MolDataset(Dataset):
         if graph is None:
             return {}
 
-        outdict = {"smi": smi, "graph": graph,}
+        outdict = {
+            "smi": smi,
+            "graph": graph,
+        }
         return outdict
 
     @classmethod
@@ -140,8 +143,7 @@ class MolDataset(Dataset):
     def collate_fn(input_list):
         """collate_fn.
         """
-        graphs, names  = zip(*[(i['graph'], i ["smi"])
-                              for i in input_list
+        graphs, names = zip(*[(i['graph'], i["smi"]) for i in input_list
                               if len(i) > 0])
 
         graph_batch = dgl.batch(graphs)
@@ -153,6 +155,7 @@ class MolDataset(Dataset):
             "names": names,
         }
         return return_dict
+
 
 # Featurizer
 class OnehotBondFeaturizer(dgllife.utils.BaseBondFeaturizer):
@@ -174,6 +177,8 @@ class OnehotBondFeaturizer(dgllife.utils.BaseBondFeaturizer):
 
     def __init__(self, bond_data_field="e", self_loop=False):
         super(OnehotBondFeaturizer, self).__init__(
-            featurizer_funcs={bond_data_field: dgllife.utils.bond_type_one_hot},
+            featurizer_funcs={
+                bond_data_field: dgllife.utils.bond_type_one_hot
+            },
             self_loop=False,
         )

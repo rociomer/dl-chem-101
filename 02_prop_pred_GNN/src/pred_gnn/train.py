@@ -18,6 +18,7 @@ from pred_gnn import utils, gnn_data, gnn_model
 
 from tdc.single_pred import ADME
 
+
 def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--debug", default=False, action="store_true")

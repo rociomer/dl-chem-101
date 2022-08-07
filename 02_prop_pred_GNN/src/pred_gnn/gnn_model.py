@@ -9,6 +9,7 @@ from torch.nn import functional as F
 
 from pred_gnn import gnn_module
 
+
 class ForwardGNN(pl.LightningModule):
 
     def __init__(self,
@@ -48,10 +49,11 @@ class ForwardGNN(pl.LightningModule):
 
         # Use identity
         self.output_activation = nn.Identity()
-        self.gnn_model = gnn_module.MoleculeGNN(hidden_size=self.hidden_size,
-                                                num_step_message_passing=self.layers,
-                                                mpnn_type="NNConv",
-                                                )
+        self.gnn_model = gnn_module.MoleculeGNN(
+            hidden_size=self.hidden_size,
+            num_step_message_passing=self.layers,
+            mpnn_type="NNConv",
+        )
         self.pool_layer = dgl.nn.AvgPooling()
         self.output_layer = nn.Sequential(
             nn.Linear(self.hidden_size, self.output_dim),

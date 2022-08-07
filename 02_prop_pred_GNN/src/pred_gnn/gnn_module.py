@@ -17,20 +17,20 @@ import dgl.function as fn
 from dgllife.model import MPNNGNN
 from dgl.backend import pytorch as dgl_F
 
+
 class MoleculeGNN(nn.Module):
     """MoleculeGNN Module"""
 
     def __init__(
-        self,
-        hidden_size: int,
-        num_step_message_passing: int = 4,
-        gnn_node_feats: int = 74,
-        gnn_edge_feats: int = 4,  # 12,
-        mpnn_type: str = "NNConv",
-        node_feat_symbol="h",
-        set_transform_layers: int = 2,
-        **kwargs
-    ):
+            self,
+            hidden_size: int,
+            num_step_message_passing: int = 4,
+            gnn_node_feats: int = 74,
+            gnn_edge_feats: int = 4,  # 12,
+            mpnn_type: str = "NNConv",
+            node_feat_symbol="h",
+            set_transform_layers: int = 2,
+            **kwargs):
         """__init__.
         Args:
             hidden_size (int): Hidden size
@@ -52,7 +52,7 @@ class MoleculeGNN(nn.Module):
                 node_in_feats=self.gnn_node_feats,
                 edge_in_feats=self.gnn_edge_feats,
                 node_out_feats=self.hidden_size,
-                edge_hidden_feats=self.hidden_size // 4,#32,
+                edge_hidden_feats=self.hidden_size // 4,  #32,
                 num_step_message_passing=num_step_message_passing,
             )
         elif self.mpnn_type == "GGNN":
@@ -81,8 +81,7 @@ class MoleculeGNN(nn.Module):
         device = g.device
         if self.mpnn_type == "NNConv":
             edge_feats = g.edata.get(
-                "e", torch.empty(0, self.gnn_edge_feats, device=device)
-            )
+                "e", torch.empty(0, self.gnn_edge_feats, device=device))
             output = self.gnn(g, node_feats, edge_feats)
         elif self.mpnn_type == "GGNN":
             # Get graph output
@@ -93,15 +92,15 @@ class MoleculeGNN(nn.Module):
         output = self.set_transformer(g, output)
         return output
 
+
 class GGNN(nn.Module):
-    def __init__(
-        self,
-        hidden_size=64,
-        edge_feats=4,
-        node_feats=74,
-        num_step_message_passing=4,
-        **kwargs
-    ):
+
+    def __init__(self,
+                 hidden_size=64,
+                 edge_feats=4,
+                 node_feats=74,
+                 num_step_message_passing=4,
+                 **kwargs):
         """GGNN.
 
         Define a gated graph neural network
@@ -125,9 +124,9 @@ class GGNN(nn.Module):
         # Define LSTM Cell
         self.gru = nn.GRUCell(self.hidden_size, self.hidden_size)
         self.edge_transform_weights = torch.nn.Parameter(
-            torch.randn(self.edge_feats, self.hidden_size, self.hidden_size)
-        )
-        self.edge_transform_bias = torch.nn.Parameter(torch.randn(self.edge_feats, 1))
+            torch.randn(self.edge_feats, self.hidden_size, self.hidden_size))
+        self.edge_transform_bias = torch.nn.Parameter(
+            torch.randn(self.edge_feats, 1))
 
         ### Compute Output transformation
         self.gate_mlp = nn.Sequential(
@@ -148,9 +147,8 @@ class GGNN(nn.Module):
         src_feat = edges.src["_h"]
 
         # Linear layer
-        messages = (
-            torch.einsum("nio,ni->no", edges.data["w"], src_feat) + edges.data["b"]
-        )
+        messages = (torch.einsum("nio,ni->no", edges.data["w"], src_feat) +
+                    edges.data["b"])
         messages = nn.functional.relu(messages)
         return {"m": messages}
 
@@ -197,6 +195,7 @@ class GGNN(nn.Module):
 # DGL Models
 # https://docs.dgl.ai/en/0.6.x/_modules/dgl/nn/pytorch/glob.html#SetTransformerDecoder
 
+
 class MultiHeadAttention(nn.Module):
     r"""Multi-Head Attention block, used in Transformer, Set Transformer and so on.
 
@@ -220,7 +219,13 @@ class MultiHeadAttention(nn.Module):
     This module was used in SetTransformer layer.
     """
 
-    def __init__(self, d_model, num_heads, d_head, d_ff, dropouth=0.0, dropouta=0.0):
+    def __init__(self,
+                 d_model,
+                 num_heads,
+                 d_head,
+                 d_ff,
+                 dropouth=0.0,
+                 dropouta=0.0):
         super(MultiHeadAttention, self).__init__()
         self.d_model = d_model
         self.num_heads = num_heads
@@ -254,7 +259,9 @@ class MultiHeadAttention(nn.Module):
         max_len_mem = max(lengths_mem)
         device = x.device
         lengths_x = torch.tensor(lengths_x, dtype=torch.int64, device=device)
-        lengths_mem = torch.tensor(lengths_mem, dtype=torch.int64, device=device)
+        lengths_mem = torch.tensor(lengths_mem,
+                                   dtype=torch.int64,
+                                   device=device)
 
         queries = self.proj_q(x).view(-1, self.num_heads, self.d_head)
         keys = self.proj_k(mem).view(-1, self.num_heads, self.d_head)
@@ -283,9 +290,8 @@ class MultiHeadAttention(nn.Module):
         # sum of value weighted by alpha
         out = torch.einsum("bhxy,byhd->bxhd", alpha, values)
         # project to output
-        out = self.proj_o(
-            out.contiguous().view(batch_size, max_len_x, self.num_heads * self.d_head)
-        )
+        out = self.proj_o(out.contiguous().view(batch_size, max_len_x,
+                                                self.num_heads * self.d_head))
         # pack tensor
         out = dgl_F.pack_padded_tensor(out, lengths_x)
         return out
@@ -309,7 +315,8 @@ class MultiHeadAttention(nn.Module):
         ### Following a _pre_ transformer
 
         # intra norm
-        x = x + self.self_attention(self.norm_in(x), mem, lengths_x, lengths_mem)
+        x = x + self.self_attention(self.norm_in(x), mem, lengths_x,
+                                    lengths_mem)
 
         # inter norm
         x = x + self.ffn(self.norm_inter(x))
@@ -345,11 +352,20 @@ class SetAttentionBlock(nn.Module):
     This module was used in SetTransformer layer.
     """
 
-    def __init__(self, d_model, num_heads, d_head, d_ff, dropouth=0.0, dropouta=0.0):
+    def __init__(self,
+                 d_model,
+                 num_heads,
+                 d_head,
+                 d_ff,
+                 dropouth=0.0,
+                 dropouta=0.0):
         super(SetAttentionBlock, self).__init__()
-        self.mha = MultiHeadAttention(
-            d_model, num_heads, d_head, d_ff, dropouth=dropouth, dropouta=dropouta
-        )
+        self.mha = MultiHeadAttention(d_model,
+                                      num_heads,
+                                      d_head,
+                                      d_ff,
+                                      dropouth=dropouth,
+                                      dropouta=dropouta)
 
     def forward(self, feat, lengths):
         """
@@ -487,15 +503,15 @@ class SetTransformerEncoder(nn.Module):
                         d_ff,
                         dropouth=dropouth,
                         dropouta=dropouta,
-                    )
-                )
+                    ))
             elif block_type == "isab":
                 # layers.append(
                 #    InducedSetAttentionBlock(m, d_model, n_heads, d_head, d_ff,
                 #                             dropouth=dropouth, dropouta=dropouta))
                 raise NotImplementedError()
             else:
-                raise KeyError("Unrecognized block type {}: we only support sab/isab")
+                raise KeyError(
+                    "Unrecognized block type {}: we only support sab/isab")
 
         self.layers = nn.ModuleList(layers)
 
@@ -543,12 +559,15 @@ def _gen_mask(lengths_x, lengths_y, max_len_x, max_len_y):
     """
     device = lengths_x.device
     # x_mask: (batch_size, max_len_x)
-    x_mask = torch.arange(max_len_x, device=device).unsqueeze(0) < lengths_x.unsqueeze(1)
+    x_mask = torch.arange(max_len_x,
+                          device=device).unsqueeze(0) < lengths_x.unsqueeze(1)
     # y_mask: (batch_size, max_len_y)
-    y_mask = torch.arange(max_len_y, device=device).unsqueeze(0) < lengths_y.unsqueeze(1)
+    y_mask = torch.arange(max_len_y,
+                          device=device).unsqueeze(0) < lengths_y.unsqueeze(1)
     # mask: (batch_size, 1, max_len_x, max_len_y)
     mask = (x_mask.unsqueeze(-1) & y_mask.unsqueeze(-2)).unsqueeze(1)
     return mask
+
 
 def pad_packed_tensor(input, lengths, value):
     """pad_packed_tensor"""
@@ -563,7 +582,7 @@ def pad_packed_tensor(input, lengths, value):
     batch_size = len(lengths)
     x = input.new(batch_size * max_len, *old_shape[1:])
     x.fill_(value)
-    
+
     # Initialize a tensor with an index for every value in the array
     index = torch.ones(len(input), dtype=torch.int64, device=device)
 
