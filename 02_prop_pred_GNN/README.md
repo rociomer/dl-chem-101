@@ -1,4 +1,4 @@
-# 02_prop_pred_gnn
+GNN Property Prediction
 
 The repository uses a gnn applied to molecule graphs to predict molecular properties.
 
