@@ -35,7 +35,8 @@ Consider attempting the tasks described from scratch and compare to how we've do
 
 We recognize that attempting these may be too time consuming for shorter
 onboarding periods. As an alternative, we provide versions of the code with _no
-documentation_ (TODO: Add). As a useful exercise, we recommend running the code and then
+documentation_ at [github.com/coleygroup/dl-chem-101-stripped](https://github.com/coleygroup/dl-chem-101-stripped). As a useful exercise, 
+we recommend forking [the repo](https://github.com/coleygroup/dl-chem-101-stripped), running the code, and then
 adding documentation to each function (i.e., docstrings). Such docstrings should specify: 
 1. What the function / class does  
 2. The type and shape of the inputs and outputs  
@@ -75,3 +76,7 @@ We recommend reviewing both [Segler *et al.* (2018)](https://doi.org/10.1021/acs
 Code for this example was adapted from the SMILES LSTM implementation in the Molecular AI [REINVENT](https://github.com/MolecularAI/Reinvent) repository and structured as a stand-alone package.
 
 Here, we train only on a smaller 50K subset of SMILES strings from the ZINC dataset [available from the TDC](https://tdcommons.ai/generation_tasks/molgen/). We also show how to run our model training script both on a local GPU and on an MIT/Lincoln Lab specific cluster, SuperCloud (using the Slurm-based LLSub system).
+
+## Authors
+* [Samuel Goldman](https://github.com/samgoldman97)
+* [Rocío Mercado](https://github.com/rociomer)
