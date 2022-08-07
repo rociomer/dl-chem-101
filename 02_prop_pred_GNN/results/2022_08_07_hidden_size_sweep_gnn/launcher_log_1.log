@@ -1,0 +1,1 @@
+CUDA_VISIBLE_DEVICES=0,1 python3 run_scripts/train_gnn.py --seed 1 --num-workers 1 --batch-size 64 --max-epochs 100 --layers 1 --dropout 0.1 --hidden-size 64 --save-dir results/2022_08_07_hidden_size_sweep_gnn/2022_08_07-1626_334893_934ea30ad8d9a4323280639a4d15fc9a

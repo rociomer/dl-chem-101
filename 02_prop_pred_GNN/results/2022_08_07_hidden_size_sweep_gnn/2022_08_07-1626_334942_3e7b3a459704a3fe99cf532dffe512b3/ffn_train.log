@@ -1,0 +1,27 @@
+2022-08-07 16:27:29,316 INFO: Args:
+batch_size: 64
+dataset_name: caco
+debug: false
+dropout: 0.1
+gpu: false
+hidden_size: 128
+layers: 1
+max_epochs: 100
+num_workers: 1
+save_dir: results/2022_08_07_hidden_size_sweep_gnn/2022_08_07-1626_334942_3e7b3a459704a3fe99cf532dffe512b3
+seed: 1
+
+2022-08-07 16:27:29,323 INFO: Train, val, test sizes: (637, 91, 182)
+
+  | Name              | Type        | Params
+--------------------------------------------------
+0 | activation        | ReLU        | 0     
+1 | output_activation | Identity    | 0     
+2 | gnn_model         | MoleculeGNN | 847 K 
+3 | pool_layer        | AvgPooling  | 0     
+4 | output_layer      | Sequential  | 129   
+--------------------------------------------------
+847 K     Trainable params
+0         Non-trainable params
+847 K     Total params
+3.392     Total estimated model params size (MB)

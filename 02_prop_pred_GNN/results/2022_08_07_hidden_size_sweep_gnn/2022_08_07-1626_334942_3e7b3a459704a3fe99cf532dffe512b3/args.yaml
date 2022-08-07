@@ -1,0 +1,11 @@
+batch_size: 64
+dataset_name: caco
+debug: false
+dropout: 0.1
+gpu: false
+hidden_size: 128
+layers: 1
+max_epochs: 100
+num_workers: 1
+save_dir: results/2022_08_07_hidden_size_sweep_gnn/2022_08_07-1626_334942_3e7b3a459704a3fe99cf532dffe512b3
+seed: 1

@@ -1,0 +1,99 @@
+2022-08-07 16:21:36,458 INFO: Args:
+batch_size: 64
+checkpoint_pth: results/example_run/version_0/epoch=10-val_loss=0.47.ckpt
+debug: false
+gpu: false
+num_workers: 0
+save_dir: results/example_run
+save_name: results/example_run/preds.tsv
+smiles_file: data/Enamine10k.csv
+
+2022-08-07 16:21:48,513 INFO: Args:
+batch_size: 64
+checkpoint_pth: results/example_run/version_0/epoch=10-val_loss=0.47.ckpt
+debug: false
+gpu: false
+num_workers: 0
+save_dir: results/example_run
+save_name: results/example_run/preds.tsv
+smiles_file: data/Enamine10k.csv
+
+2022-08-07 16:21:48,565 INFO: Loaded model with from results/example_run/version_0/epoch=10-val_loss=0.47.ckpt
+2022-08-07 16:22:28,208 INFO: Args:
+batch_size: 64
+checkpoint_pth: results/example_run/version_0/epoch=10-val_loss=0.47.ckpt
+debug: false
+gpu: false
+num_workers: 0
+save_dir: results/example_run
+save_name: results/example_run/preds.tsv
+smiles_file: data/Enamine10k.csv
+
+2022-08-07 16:22:28,265 INFO: Loaded model with from results/example_run/version_0/epoch=10-val_loss=0.47.ckpt
+2022-08-07 16:22:35,190 INFO: Args:
+batch_size: 64
+checkpoint_pth: results/example_run/version_0/epoch=10-val_loss=0.47.ckpt
+debug: false
+gpu: false
+num_workers: 0
+save_dir: results/example_run
+save_name: results/example_run/preds.tsv
+smiles_file: data/Enamine10k.csv
+
+2022-08-07 16:22:35,243 INFO: Loaded model with from results/example_run/version_0/epoch=10-val_loss=0.47.ckpt
+2022-08-07 16:23:48,546 INFO: Args:
+batch_size: 64
+checkpoint_pth: results/example_run/version_0/epoch=10-val_loss=0.47.ckpt
+debug: false
+gpu: false
+num_workers: 0
+save_dir: results/example_run
+save_name: results/example_run/preds.tsv
+smiles_file: data/Enamine10k.csv
+
+2022-08-07 16:23:48,600 INFO: Loaded model with from results/example_run/version_0/epoch=10-val_loss=0.47.ckpt
+2022-08-07 16:23:55,022 INFO: Args:
+batch_size: 64
+checkpoint_pth: results/example_run/version_0/epoch=10-val_loss=0.47.ckpt
+debug: false
+gpu: false
+num_workers: 0
+save_dir: results/example_run
+save_name: results/example_run/preds.tsv
+smiles_file: data/Enamine10k.csv
+
+2022-08-07 16:23:55,074 INFO: Loaded model with from results/example_run/version_0/epoch=10-val_loss=0.47.ckpt
+2022-08-07 16:24:23,811 INFO: Args:
+batch_size: 64
+checkpoint_pth: results/example_run/version_0/epoch=10-val_loss=0.47.ckpt
+debug: false
+gpu: false
+num_workers: 0
+save_dir: results/example_run
+save_name: results/example_run/preds.tsv
+smiles_file: data/Enamine10k.csv
+
+2022-08-07 16:24:23,872 INFO: Loaded model with from results/example_run/version_0/epoch=10-val_loss=0.47.ckpt
+2022-08-07 16:24:41,911 INFO: Args:
+batch_size: 64
+checkpoint_pth: results/example_run/version_0/epoch=10-val_loss=0.47.ckpt
+debug: false
+gpu: false
+num_workers: 0
+save_dir: results/example_run
+save_name: results/example_run/preds.tsv
+smiles_file: data/Enamine10k.csv
+
+2022-08-07 16:24:41,965 INFO: Loaded model with from results/example_run/version_0/epoch=10-val_loss=0.47.ckpt
+2022-08-07 16:24:57,295 INFO: Args:
+batch_size: 64
+checkpoint_pth: results/example_run/version_0/epoch=10-val_loss=0.47.ckpt
+debug: false
+gpu: true
+num_workers: 0
+save_dir: results/example_run
+save_name: results/example_run/preds.tsv
+smiles_file: data/Enamine10k.csv
+
+2022-08-07 16:24:57,349 INFO: Loaded model with from results/example_run/version_0/epoch=10-val_loss=0.47.ckpt
+2022-08-07 16:25:42,933 INFO: Program finished in: 45.639545917510986 seconds

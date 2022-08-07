@@ -1,0 +1,56 @@
+2022-08-07 16:26:29,889 INFO: Args:
+batch_size: 64
+dataset_name: caco
+debug: false
+dropout: 0.1
+gpu: false
+hidden_size: 64
+layers: 1
+max_epochs: 100
+num_workers: 1
+save_dir: results/2022_08_07_hidden_size_sweep_gnn/2022_08_07-1626_334893_934ea30ad8d9a4323280639a4d15fc9a
+seed: 1
+
+2022-08-07 16:26:29,896 INFO: Train, val, test sizes: (637, 91, 182)
+
+  | Name              | Type        | Params
+--------------------------------------------------
+0 | activation        | ReLU        | 0     
+1 | output_activation | Identity    | 0     
+2 | gnn_model         | MoleculeGNN | 149 K 
+3 | pool_layer        | AvgPooling  | 0     
+4 | output_layer      | Sequential  | 65    
+--------------------------------------------------
+149 K     Trainable params
+0         Non-trainable params
+149 K     Total params
+0.598     Total estimated model params size (MB)
+2022-08-07 16:26:32,756 INFO: Epoch 0, step 9-- val_loss : 1.3435797691345215
+2022-08-07 16:26:35,452 INFO: Epoch 1, step 19-- val_loss : 0.5575913190841675
+2022-08-07 16:26:38,065 INFO: Epoch 2, step 29-- val_loss : 0.628445029258728
+2022-08-07 16:26:40,728 INFO: Epoch 3, step 39-- val_loss : 0.5044095516204834
+2022-08-07 16:26:42,732 INFO: Epoch 4, step 49-- train_loss : 0.35310328006744385
+2022-08-07 16:26:43,399 INFO: Epoch 4, step 49-- val_loss : 0.5293617248535156
+2022-08-07 16:26:45,925 INFO: Epoch 5, step 59-- val_loss : 0.5029879808425903
+2022-08-07 16:26:48,419 INFO: Epoch 6, step 69-- val_loss : 0.5037508010864258
+2022-08-07 16:26:50,959 INFO: Epoch 7, step 79-- val_loss : 0.5061350464820862
+2022-08-07 16:26:53,571 INFO: Epoch 8, step 89-- val_loss : 0.5022385716438293
+2022-08-07 16:26:55,683 INFO: Epoch 9, step 99-- train_loss : 0.4552069902420044
+2022-08-07 16:26:56,159 INFO: Epoch 9, step 99-- val_loss : 0.510778546333313
+2022-08-07 16:26:58,857 INFO: Epoch 10, step 109-- val_loss : 0.5062940120697021
+2022-08-07 16:27:01,366 INFO: Epoch 11, step 119-- val_loss : 0.5005300045013428
+2022-08-07 16:27:03,893 INFO: Epoch 12, step 129-- val_loss : 0.5036875605583191
+2022-08-07 16:27:06,414 INFO: Epoch 13, step 139-- val_loss : 0.5062799453735352
+2022-08-07 16:27:08,494 INFO: Epoch 14, step 149-- train_loss : 0.5853320360183716
+2022-08-07 16:27:08,947 INFO: Epoch 14, step 149-- val_loss : 0.5037553906440735
+2022-08-07 16:27:11,727 INFO: Epoch 15, step 159-- val_loss : 0.5045681595802307
+2022-08-07 16:27:14,187 INFO: Epoch 16, step 169-- val_loss : 0.5038990378379822
+2022-08-07 16:27:16,800 INFO: Epoch 17, step 179-- val_loss : 0.5039985179901123
+2022-08-07 16:27:19,459 INFO: Epoch 18, step 189-- val_loss : 0.5037786364555359
+2022-08-07 16:27:21,505 INFO: Epoch 19, step 199-- train_loss : 0.8970221281051636
+2022-08-07 16:27:21,971 INFO: Epoch 19, step 199-- val_loss : 0.5043129920959473
+2022-08-07 16:27:24,592 INFO: Epoch 20, step 209-- val_loss : 0.5038925409317017
+2022-08-07 16:27:27,205 INFO: Epoch 21, step 219-- val_loss : 0.5047513246536255
+2022-08-07 16:27:27,217 INFO: Loaded model with from /home/samlg/projects/dl-chem-101/02_prop_pred_GNN/results/2022_08_07_hidden_size_sweep_gnn/2022_08_07-1626_334893_934ea30ad8d9a4323280639a4d15fc9a/version_0/epoch=11-val_loss=0.50.ckpt with val loss of 0.5005300045013428
+2022-08-07 16:27:27,780 INFO: Epoch 21, step 220-- test_loss : 0.6336144804954529
+2022-08-07 16:27:27,782 INFO: Program finished in: 57.894824266433716 seconds

@@ -1,0 +1,7 @@
+dropout: 0.1
+hidden_size: 128
+input_dim: 2048
+layers: 1
+learning_rate: 0.0007
+min_lr: 1.0e-05
+output_dim: 1

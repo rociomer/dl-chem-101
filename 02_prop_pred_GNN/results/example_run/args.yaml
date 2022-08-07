@@ -1,0 +1,8 @@
+batch_size: 64
+checkpoint_pth: results/example_run/version_0/epoch=10-val_loss=0.47.ckpt
+debug: false
+gpu: true
+num_workers: 0
+save_dir: results/example_run
+save_name: results/example_run/preds.tsv
+smiles_file: data/Enamine10k.csv
