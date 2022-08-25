@@ -29,7 +29,7 @@ def get_args():
     parser.add_argument("--max-epochs", default=100, action="store", type=int)
     parser.add_argument("--save-dir", default="results/example_run/")
 
-    parser.add_argument("--dataset-name", default="caco", choices=["cacao"])
+    parser.add_argument("--dataset-name", default="caco", choices=["caco"])
 
     # Model args
     parser.add_argument("--layers", default=3, action="store", type=int)
