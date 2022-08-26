@@ -8,6 +8,7 @@ Install the conda environment:
 
 ```
 conda env create -f environment.yml
+conda activate dl-chem
 pip install -r requirements.txt
 ```
 
