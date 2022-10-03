@@ -8,6 +8,9 @@ The code in this package is structured as follows:
 * `output/` is a placeholder directory for the output from training jobs
 * `analysis/` is a placeholder directory for figures and results of any data analyses
 
+## Walkthrough
+For a nice guide explaining the ins and outs of how a SMILES LSTM works, check out [SMILES-LSTM-Walkthrough.ipynb](./SMILES-LSTM-Walkthrough.ipynb)!
+
 # Instructions
 ## 00 - Setting up the environment
 Note: to use conda on molgpu01, you will need to install Miniconda locally. To do this, run:
