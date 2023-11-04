@@ -21,7 +21,7 @@ bash Miniconda3-py39_4.12.0-Linux-x86_64.sh
 
 To create the environment from scratch using conda, run:
 ```
-conda create -n smiles-lstm-env pytorch torchvision torchaudio cudatoolkit=11.1 -c pytorch
+conda create -n smiles-lstm-env pytorch torchvision torchaudio cudatoolkit=11.1 -c pytorch -c conda-forge
 conda activate smiles-lstm-env
 pip install rdkit
 pip install PyTDC
@@ -61,7 +61,7 @@ You can modify this script to run on any other cluster (you will most likely nee
 ## 04 - Analysis and making figures
 As an example, we can visualize how the training and validation losses change during training, as well as how the validity of molecules sampled from our SMILES LSTM increases as we train it for more epochs. To visualize these results, run:
 ```
-python ./analysis/plot_results.py --jobdir ./output/run-local/
+python ./scripts/04_plot_results.py --jobdir ./output/run_local/
 ``` 
 
 This will create two plots in the `./analysis/` directory.
