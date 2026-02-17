@@ -155,7 +155,7 @@ class SmilesLSTM():
             SmilesLSTM : New instance of the RNN, or an exception if it was not
                          possible to load it.
         """
-        model = torch.load(file_path)
+        model = torch.load(file_path, weights_only=False)
         if sampling_mode:
             model.network.eval()
 
@@ -291,7 +291,6 @@ class SmilesLSTM():
         ----
             batch_size (int, optional) : Size of generation batches. Defaults to
                                          128.
-
         Returns:
         -------
             torch.Tensor : Sampled sequences.

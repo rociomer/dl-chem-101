@@ -244,8 +244,8 @@ class SmilesTrainer():
         -------
             torch.utils.data.DataLoader : Dataloader object.
         """
+        smiles_list_augmented = []
         if self._use_augmentation:
-            smiles_list_augmented = []
             for smiles in smiles_list:
                 smiles_list_augmented += self._augment(smiles=smiles,
                                                        n_permutations=self._use_augmentation)

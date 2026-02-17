@@ -30,7 +30,6 @@ def suppress_warnings(level : str="minor") -> None:
     else:
         raise ValueError(f"Not a valid `level`. Use 'minor' or 'all', not '{level}'.")
 
-@staticmethod
 def get_device() -> str:
     """
     Gets the available device (GPU or CPU).

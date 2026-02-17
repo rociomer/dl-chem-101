@@ -19,19 +19,31 @@ parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFo
                                  add_help=False)
 
 # define parameters for the model
-parser.add_argument("--output",
+parser.add_argument("--data_dir",
                     type=str,
-                    default="./output/run_local/",
+                    default="./data/zinc_pretrain/",
+                    help="Specifies the path to which to read data from.")
+parser.add_argument("--output_dir",
+                    type=str,
+                    default="./output/pretrain/",
                     help="Specifies the path to which to write output to.")
+parser.add_argument("--epochs",
+                    type=int,
+                    default=10,
+                    help="Specifies how many epochs to train for.")
+parser.add_argument("--samples",
+                    type=int,
+                    default=256,
+                    help="Specifies how many samples to generate each evaluation epoch.")
 args = parser.parse_args()
 
 
 if __name__ == '__main__':
-    print("*** Building a vocabulary from ZINC data ***", flush=True)
-    zinc_path = Path("./data/zinc/")
-    train     = load.smiles(path=(zinc_path.joinpath("train.smi")))
-    test      = load.smiles(path=(zinc_path.joinpath("test.smi")))
-    valid     = load.smiles(path=(zinc_path.joinpath("valid.smi")))
+    print("*** Building a vocabulary from training data ***", flush=True)
+    data_path = Path(f"{args.data_dir}")
+    train     = load.smiles(path=(data_path.joinpath("train.smi")))
+    test      = load.smiles(path=(data_path.joinpath("test.smi")))
+    valid     = load.smiles(path=(data_path.joinpath("valid.smi")))
     
     dataset = train + test + valid
     
@@ -45,11 +57,11 @@ if __name__ == '__main__':
     
     # define network parameters
     network_parameters = {
-        'num_layers'          : 3,
+        'num_layers'          : 2,
         'layer_size'          : 512,
         'cell_type'           : 'lstm',
         'embedding_layer_size': 512,
-        'dropout'             : 0.2,
+        'dropout'             : 0.1,
         'layer_normalization' : True,
     }
     
@@ -60,16 +72,16 @@ if __name__ == '__main__':
     
     trainer = SmilesTrainer(model=smiles_lstm,
                             input_smiles=SMILES_dict,
-                            epochs=10,
+                            epochs=args.epochs,
                             shuffle=True,
                             batch_size=2048,
-                            learning_rate=0.0001,
+                            learning_rate=0.001,
                             augment=3,
-                            output_model_path=args.output,
+                            output_model_path=args.output_dir,
                             start_epoch=0,
                             learning_rate_scheduler="StepLR",
                             gamma=0.9,
-                            eval_num_samples=256,
+                            eval_num_samples=args.samples,
                             eval_batch_size=256)
     
     print("*** Training the model ***", flush=True)
